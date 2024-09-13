@@ -86,7 +86,7 @@ python ms-patch-tuesday-fetcher.py --days 30 --raw
 
 ## How It Works
 
-- The script fetches Microsoft Patch Tuesday updates from the [Microsoft Security Update Guide API](https://api.msrc.microsoft.com/).
+- The script fetches Microsoft Patch Tuesday updates from the [Microsoft Security Update Guide API](https://github.com/microsoft/MSRC-Microsoft-Security-Updates-API).
 - It extracts KB articles, products affected, and CVE numbers from the returned data and prints them to the console.
 - The script can also print the raw API response for debugging using the `--raw` flag.
 
