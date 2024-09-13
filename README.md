@@ -16,6 +16,8 @@ This Python script fetches the latest Microsoft Patch Tuesday updates from Micro
   - `requests`
   - `beautifulsoup4`
 
+For instructions on deploying this script to AWS Lambda, see the [Lambda Setup Guide](./lambda-example/LAMBDA_SETUP.md).
+
 ## Setup
 
 ### Step 1: Create a Conda environment
