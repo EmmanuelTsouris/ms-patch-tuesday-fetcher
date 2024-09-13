@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to deploy the ms-patch-tuesday-fetcher-lambda function.
+
+Parameters:
+  S3Bucket:
+    Description: "The S3 bucket where the Lambda deployment package is stored."
+    Type: String
+  S3Key:
+    Description: "The S3 key (file name) of the Lambda deployment package."
+    Type: String
+    Default: "ms-patch-tuesday-fetcher-lambda.zip"
+  LambdaFunctionName:
+    Description: "The name of the Lambda function."
+    Type: String
+    Default: "ms-patch-tuesday-fetcher-lambda"
+
+Resources:
+
+  # IAM Role for Lambda Execution
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${LambdaFunctionName}-ExecutionRole"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaBasicExecution
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+
+  # Lambda Function
+  PatchTuesdayFetcherLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Ref LambdaFunctionName
+      Handler: ms-patch-tuesday-fetcher-lambda.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: !Ref S3Bucket
+        S3Key: !Ref S3Key
+      Runtime: python3.8
+      MemorySize: 128
+      Timeout: 30
+
+  # CloudWatch Log Group
+  LambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${LambdaFunctionName}"
+      RetentionInDays: 14
+
+Outputs:
+  LambdaFunctionNameOutput:
+    Description: Name of the deployed Lambda function
+    Value: !Ref PatchTuesdayFetcherLambda
+  LambdaExecutionRoleArn:
+    Description: ARN of the Lambda execution role
+    Value: !GetAtt LambdaExecutionRole.Arn
