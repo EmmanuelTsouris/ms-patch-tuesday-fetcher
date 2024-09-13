@@ -4,7 +4,7 @@ This Python script fetches the latest Microsoft Patch Tuesday updates from Micro
 
 ## Features
 
-- Fetch Microsoft Patch Tuesday updates within the last 7 days.
+- Fetch Microsoft Patch Tuesday updates within a specified number of days.
 - Extract and display KB articles and CVE numbers.
 - Option to show raw API output for debugging purposes.
 
@@ -52,16 +52,34 @@ cd ms-patch-tuesday-fetcher
 
 ### Step 4: Run the Script
 
-Run the script to fetch the latest Patch Tuesday updates:
+You can run the script to fetch the latest Patch Tuesday updates for a default of the last 7 days:
 
 ```bash
 python ms-patch-tuesday-fetcher.py
 ```
 
-To see the raw API output for debugging, use the `--raw` flag:
+#### Fetching Updates from the Last X Days
+
+To fetch updates from the last X number of days, use the `--days` argument:
+
+```bash
+python ms-patch-tuesday-fetcher.py --days 30
+```
+
+This will fetch updates from the last 30 days.
+
+#### Show Raw API Output for Debugging
+
+To see the raw API output for debugging purposes, use the `--raw` flag:
 
 ```bash
 python ms-patch-tuesday-fetcher.py --raw
+```
+
+You can also combine the `--raw` and `--days` arguments, for example:
+
+```bash
+python ms-patch-tuesday-fetcher.py --days 30 --raw
 ```
 
 ## How It Works
