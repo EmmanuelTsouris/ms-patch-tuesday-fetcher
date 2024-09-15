@@ -2,6 +2,8 @@
 
 This Python script fetches the latest Microsoft Patch Tuesday updates from Microsoft's Security Update API. It extracts the KB articles, products affected, and CVE information, and displays them in a readable format.
 
+![GitHub Actions](https://github.com/EmmanuelTsouris/ms-patch-tuesday-fetcher/actions/workflows/python-package-conda.yml/badge.svg)
+
 ## Features
 
 - Fetch Microsoft Patch Tuesday updates within a specified number of days.
