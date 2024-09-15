@@ -59,6 +59,7 @@ cd ms-patch-tuesday-fetcher
 You can run the script to fetch the latest Patch Tuesday updates for a default of the last 7 days:
 
 ```bash
+cd ms-patch-tuesday-fetcher
 python ms-patch-tuesday-fetcher.py
 ```
 
