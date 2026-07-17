@@ -11,10 +11,16 @@ HEADERS = {
     'Accept': 'application/json'
 }
 
+# Seconds to wait for the API before giving up. Kept below the Lambda
+# function timeout (30s in lambda-cfn.yml) so a hung connection is caught
+# with headroom to log the error and return the intended response instead
+# of the function being killed mid-request.
+REQUEST_TIMEOUT = 25
+
 # Function to fetch all updates (no OData filter)
 def get_all_updates(show_raw=False):
     try:
-        response = requests.get(BASE_URL, headers=HEADERS)
+        response = requests.get(BASE_URL, headers=HEADERS, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()  # Raise error if the request fails
         updates = response.json()
 
@@ -27,20 +33,44 @@ def get_all_updates(show_raw=False):
         print(f"Error fetching updates from Microsoft API: {e}")
         return []
 
+# Parse an MSRC releaseDate into a UTC-aware datetime, or None if the
+# value is missing or in an unexpected format. Tolerates fractional
+# seconds and explicit offsets in addition to the usual trailing "Z".
+def parse_release_date(release_date_str):
+    if not release_date_str:
+        return None
+
+    # datetime.fromisoformat() didn't accept a trailing "Z" until Python
+    # 3.11, so normalize it to an explicit UTC offset first.
+    normalized = release_date_str.strip()
+    if normalized.endswith('Z'):
+        normalized = normalized[:-1] + '+00:00'
+
+    try:
+        parsed = datetime.fromisoformat(normalized)
+    except ValueError:
+        return None
+
+    # Treat a naive timestamp as UTC (the API reports UTC).
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed
+
 # Function to filter updates by release date in Python
 def filter_updates_by_date(updates, days_back):
-    # The API's releaseDate values are UTC (trailing "Z"), so compare
-    # against a UTC "now" to keep the day window independent of the host's
-    # local timezone.
+    # The API's releaseDate values are UTC, so compare against a UTC "now"
+    # to keep the day window independent of the host's local timezone.
     time_threshold = datetime.now(timezone.utc) - timedelta(days=days_back)
     filtered_updates = []
 
     for update in updates:
-        release_date_str = update.get('releaseDate', None)
-        if release_date_str:
-            release_date = datetime.strptime(release_date_str, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
-            if release_date >= time_threshold:
-                filtered_updates.append(update)
+        release_date = parse_release_date(update.get('releaseDate'))
+        if release_date is None:
+            # Skip records with a missing/unrecognized date rather than
+            # letting one bad value abort the whole run.
+            continue
+        if release_date >= time_threshold:
+            filtered_updates.append(update)
 
     return filtered_updates
 
@@ -52,7 +82,7 @@ def extract_kb_from_description(description):
     kb_list = []
     for row in kb_table_rows:
         columns = row.find_all('td')  # Find all columns in the row
-        if len(columns) == 2:
+        if len(columns) >= 2:  # Header rows (only <th>) have no <td> and are skipped
             kb_link = columns[0].find('a')  # Find the KB link
             if kb_link:
                 kb_number = kb_link.text  # Extract the KB number
