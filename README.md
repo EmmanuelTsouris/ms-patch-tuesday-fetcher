@@ -17,7 +17,7 @@ This Python script fetches the latest Microsoft Patch Tuesday updates from Micro
   - `requests`
   - `beautifulsoup4`
 
-For instructions on deploying this script to AWS Lambda, see the [Lambda Setup Guide](./lambda-example/LAMBDA_SETUP.md).
+For instructions on deploying this script to AWS Lambda, see the [Lambda Setup Guide](./lambda_example/LAMBDA_SETUP.md).
 
 ## Setup
 
@@ -52,8 +52,7 @@ cd ms-patch-tuesday-fetcher
 You can run the script to fetch the latest Patch Tuesday updates for a default of the last 7 days:
 
 ```bash
-cd ms-patch-tuesday-fetcher
-python ms-patch-tuesday-fetcher.py
+python ms_patch_tuesday_fetcher/ms_patch_tuesday_fetcher.py
 ```
 
 #### Fetching Updates from the Last X Days
@@ -61,7 +60,7 @@ python ms-patch-tuesday-fetcher.py
 To fetch updates from the last X number of days, use the `--days` argument:
 
 ```bash
-python ms-patch-tuesday-fetcher.py --days 30
+python ms_patch_tuesday_fetcher/ms_patch_tuesday_fetcher.py --days 30
 ```
 
 This will fetch updates from the last 30 days.
@@ -71,13 +70,13 @@ This will fetch updates from the last 30 days.
 To see the raw API output for debugging purposes, use the `--raw` flag:
 
 ```bash
-python ms-patch-tuesday-fetcher.py --raw
+python ms_patch_tuesday_fetcher/ms_patch_tuesday_fetcher.py --raw
 ```
 
 You can also combine the `--raw` and `--days` arguments, for example:
 
 ```bash
-python ms-patch-tuesday-fetcher.py --days 30 --raw
+python ms_patch_tuesday_fetcher/ms_patch_tuesday_fetcher.py --days 30 --raw
 ```
 
 ## How It Works
@@ -94,8 +93,6 @@ Found 1 updates from the last 7 days.
   KB Articles:
   - KB5002624 (Applies to: SharePoint Enterprise Server 2016)
   - KB5002639 (Applies to: SharePoint Server 2019)
-  - KB5002640 (Applies to: SharePoint Server Subscription Edition)
-  - KB5042881 (Applies to: Windows 11, version 21H2)
 ```
 
 ## Contributing
