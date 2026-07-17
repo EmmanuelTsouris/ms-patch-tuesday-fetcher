@@ -60,7 +60,7 @@ def extract_kb_from_description(description):
                 kb_list.append((kb_number, product))
     return kb_list
 
-# Function to extract CVEs, KB numbers, and other relevant information
+# Function to collect each update's title, release date, and KB articles
 def extract_cve_kb_info(updates):
     results = []
     for update in updates:
@@ -95,7 +95,7 @@ def lambda_handler(event, context):
         recent_updates = filter_updates_by_date(updates, days_back)
         print(f"Found {len(recent_updates)} updates from the last {days_back} days.")
 
-        # Extract KB articles and CVEs
+        # Extract KB articles
         results = extract_cve_kb_info(recent_updates)
         return {
             'statusCode': 200,
