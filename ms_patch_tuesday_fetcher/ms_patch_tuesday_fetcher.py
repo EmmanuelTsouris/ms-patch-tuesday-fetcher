@@ -90,7 +90,7 @@ def extract_kb_from_description(description):
                 kb_list.append((kb_number, product))
     return kb_list
 
-# Function to extract CVEs, KB numbers, and other relevant information
+# Function to print each update's title, release date, and KB articles
 def extract_cve_kb_info(updates):
     for update in updates:
         title = update.get('title', 'No title available')
