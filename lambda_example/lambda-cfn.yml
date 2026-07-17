@@ -45,7 +45,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Ref LambdaFunctionName
-      Handler: ms-patch-tuesday-fetcher-lambda.lambda_handler
+      Handler: ms_patch_tuesday_fetcher_lambda.lambda_handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
         S3Bucket: !Ref S3Bucket

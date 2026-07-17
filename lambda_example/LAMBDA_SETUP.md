@@ -1,6 +1,6 @@
 # AWS Lambda Setup for Microsoft Patch Tuesday Fetcher
 
-This guide provides instructions on how to deploy and run the `ms-patch-tuesday-fetcher-lambda.py` Python script on AWS Lambda.
+This guide provides instructions on how to deploy and run the `ms_patch_tuesday_fetcher_lambda.py` Python script on AWS Lambda.
 
 ## Steps to Set Up the Script in AWS Lambda
 
@@ -22,7 +22,7 @@ AWS Lambda requires dependencies to be packaged with your script in a `.zip` fil
     ```
 
 3. **Copy the Python script into the same directory**:
-    Ensure that the file `ms-patch-tuesday-fetcher-lambda.py` is inside the `lambda_package` directory.
+    Ensure that the file `ms_patch_tuesday_fetcher_lambda.py` is inside the `lambda_package` directory.
 
 4. **Create a zip file containing the script and its dependencies**:
 
