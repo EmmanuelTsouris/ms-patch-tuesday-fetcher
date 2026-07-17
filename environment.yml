@@ -1,8 +1,0 @@
-name: ms-patch-tuesday-fetcher-env
-channels:
-  - defaults
-dependencies:
-  - python=3.8
-  - requests
-  - beautifulsoup4
-  - pytest

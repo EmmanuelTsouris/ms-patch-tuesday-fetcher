@@ -1,13 +1,19 @@
 import pytest
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 from ms_patch_tuesday_fetcher.ms_patch_tuesday_fetcher import get_all_updates, filter_updates_by_date, extract_kb_from_description, extract_cve_kb_info
+
+# Release date relative to "now" so the date-window tests stay valid no
+# matter when they run. 5 days ago is inside a 30/7-day window and outside
+# a 1-day window.
+RECENT_RELEASE_DATE = (datetime.now(timezone.utc) - timedelta(days=5)).strftime('%Y-%m-%dT%H:%M:%SZ')
 
 # Sample API response for testing
 sample_response = {
     "value": [
         {
             "title": "September 2024 Security Updates",
-            "releaseDate": "2024-09-10T07:00:00Z",
+            "releaseDate": RECENT_RELEASE_DATE,
             "description": """<table>
             <tr><td><a href="https://support.microsoft.com/help/5002624">5002624</a></td><td>SharePoint Enterprise Server 2016</td></tr>
             <tr><td><a href="https://support.microsoft.com/help/5002639">5002639</a></td><td>SharePoint Server 2019</td></tr>
