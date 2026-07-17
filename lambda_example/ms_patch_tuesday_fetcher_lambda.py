@@ -11,9 +11,11 @@ HEADERS = {
     'Accept': 'application/json'
 }
 
-# Seconds to wait for the API before giving up, so a hung server can't
-# tie up the Lambda for its full timeout.
-REQUEST_TIMEOUT = 30
+# Seconds to wait for the API before giving up. Kept below the Lambda
+# function timeout (30s in lambda-cfn.yml) so a hung connection is caught
+# with headroom to log the error and return the intended response instead
+# of the function being killed mid-request.
+REQUEST_TIMEOUT = 25
 
 # Function to fetch all updates (no OData filter)
 def get_all_updates(show_raw=False):
