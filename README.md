@@ -12,8 +12,7 @@ This Python script fetches the latest Microsoft Patch Tuesday updates from Micro
 
 ## Prerequisites
 
-- [Miniconda](https://docs.conda.io/en/latest/miniconda.html) (or [Anaconda](https://www.anaconda.com/products/distribution))
-- Python 3.x
+- Python 3.10 or newer
 - The following Python packages:
   - `requests`
   - `beautifulsoup4`
@@ -22,24 +21,18 @@ For instructions on deploying this script to AWS Lambda, see the [Lambda Setup G
 
 ## Setup
 
-### Step 1: Create a Conda environment
+### Step 1: Create a virtual environment
 
-You can create and activate a Conda environment for this project by running:
+You can create and activate a virtual environment for this project by running:
 
 ```bash
-conda create --name ms-patch-fetcher python=3
-conda activate ms-patch-fetcher
+python -m venv .venv
+source .venv/bin/activate
 ```
 
 ### Step 2: Install Dependencies
 
 Once the environment is activated, install the necessary dependencies:
-
-```bash
-conda install requests beautifulsoup4
-```
-
-Alternatively, you can use `pip`:
 
 ```bash
 pip install requests beautifulsoup4
