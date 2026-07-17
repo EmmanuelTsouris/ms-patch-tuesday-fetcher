@@ -1,7 +1,7 @@
 import requests
 import json
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # Constants
 BASE_URL = "https://api.msrc.microsoft.com/sug/v2.0/en-US/releaseNote"
@@ -29,13 +29,16 @@ def get_all_updates(show_raw=False):
 
 # Function to filter updates by release date in Python
 def filter_updates_by_date(updates, days_back):
-    time_threshold = datetime.now() - timedelta(days=days_back)
+    # The API's releaseDate values are UTC (trailing "Z"), so compare
+    # against a UTC "now" to keep the day window independent of the host's
+    # local timezone.
+    time_threshold = datetime.now(timezone.utc) - timedelta(days=days_back)
     filtered_updates = []
 
     for update in updates:
         release_date_str = update.get('releaseDate', None)
         if release_date_str:
-            release_date = datetime.strptime(release_date_str, '%Y-%m-%dT%H:%M:%SZ')
+            release_date = datetime.strptime(release_date_str, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
             if release_date >= time_threshold:
                 filtered_updates.append(update)
 
