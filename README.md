@@ -1,13 +1,13 @@
 # Microsoft Patch Tuesday Fetcher
 
-This Python script fetches the latest Microsoft Patch Tuesday updates from Microsoft's Security Update API. It extracts the KB articles, products affected, and CVE information, and displays them in a readable format.
+This Python script fetches the latest Microsoft Patch Tuesday updates from Microsoft's Security Update API. It extracts the KB articles and the products they apply to, and displays them in a readable format.
 
 ![CI](https://github.com/EmmanuelTsouris/ms-patch-tuesday-fetcher/actions/workflows/ci.yml/badge.svg)
 
 ## Features
 
 - Fetch Microsoft Patch Tuesday updates within a specified number of days.
-- Extract and display KB articles and CVE numbers.
+- Extract and display KB articles and the products they apply to.
 - Option to show raw API output for debugging purposes.
 
 ## Prerequisites
@@ -82,7 +82,7 @@ python ms_patch_tuesday_fetcher/ms_patch_tuesday_fetcher.py --days 30 --raw
 ## How It Works
 
 - The script fetches Microsoft Patch Tuesday updates from the [Microsoft Security Update Guide API](https://github.com/microsoft/MSRC-Microsoft-Security-Updates-API).
-- It extracts KB articles, products affected, and CVE numbers from the returned data and prints them to the console.
+- It extracts KB articles and the products they apply to from the returned data and prints them to the console.
 - The script can also print the raw API response for debugging using the `--raw` flag.
 
 ## Example Output
