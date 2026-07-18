@@ -43,3 +43,16 @@ def test_lambda_handler_no_updates(mock_get_all_updates):
 
     assert result['statusCode'] == 200
     assert json.loads(result['body']) == {"message": "No updates found."}
+
+
+# The 'product' event option filters the results by product name.
+@patch('lambda_example.ms_patch_tuesday_fetcher_lambda.get_all_updates')
+def test_lambda_handler_product_filter(mock_get_all_updates):
+    mock_get_all_updates.return_value = sample_value
+
+    result = lambda_handler({"days": 7, "product": "SharePoint Server 2019"}, {})
+
+    body = json.loads(result['body'])
+    assert len(body) == 1
+    # Only the matching KB survives the product filter.
+    assert body[0]['kb_articles'] == ["KB5002639 (Applies to: SharePoint Server 2019)"]

@@ -1,0 +1,1400 @@
+{
+ "DocumentTitle": {
+  "Value": "July 2026 Security Updates"
+ },
+ "ProductTree": {
+  "FullProductName": [
+   {
+    "ProductID": "10378",
+    "CPE": "cpe:2.3:o:microsoft:windows_server_2012:6.2.9200.26226:*:*:*:*:*:x64:*",
+    "Value": "Windows Server 2012"
+   },
+   {
+    "ProductID": "10379",
+    "CPE": "cpe:2.3:o:microsoft:windows_server_2012:6.2.9200.26226:*:*:*:*:*:x64:*",
+    "Value": "Windows Server 2012 (Server Core installation)"
+   },
+   {
+    "ProductID": "10483",
+    "CPE": "cpe:2.3:o:microsoft:windows_server_2012_R2:6.3.9600.23291:*:*:*:*:*:x64:*",
+    "Value": "Windows Server 2012 R2"
+   },
+   {
+    "ProductID": "10543",
+    "CPE": "cpe:2.3:o:microsoft:windows_server_2012_R2:6.3.9600.23291:*:*:*:*:*:x64:*",
+    "Value": "Windows Server 2012 R2 (Server Core installation)"
+   },
+   {
+    "ProductID": "10816",
+    "CPE": "cpe:2.3:o:microsoft:windows_server_2016:10.0.14393.9339:*:*:*:*:*:*:*",
+    "Value": "Windows Server 2016"
+   },
+   {
+    "ProductID": "10852",
+    "CPE": "cpe:2.3:o:microsoft:windows_10_1607:10.0.14393.9339:*:*:*:*:*:x86:*",
+    "Value": "Windows 10 Version 1607 for 32-bit Systems"
+   },
+   {
+    "ProductID": "10853",
+    "CPE": "cpe:2.3:o:microsoft:windows_10_1607:10.0.14393.9339:*:*:*:*:*:x64:*",
+    "Value": "Windows 10 Version 1607 for x64-based Systems"
+   },
+   {
+    "ProductID": "10855",
+    "CPE": "cpe:2.3:o:microsoft:windows_server_2016:10.0.14393.9339:*:*:*:*:*:*:*",
+    "Value": "Windows Server 2016 (Server Core installation)"
+   },
+   {
+    "ProductID": "11568",
+    "CPE": "cpe:2.3:o:microsoft:windows_10_1809:10.0.17763.9020:*:*:*:*:*:x86:*",
+    "Value": "Windows 10 Version 1809 for 32-bit Systems"
+   },
+   {
+    "ProductID": "11569",
+    "CPE": "cpe:2.3:o:microsoft:windows_10_1809:10.0.17763.9020:*:*:*:*:*:x64:*",
+    "Value": "Windows 10 Version 1809 for x64-based Systems"
+   },
+   {
+    "ProductID": "11571",
+    "CPE": "cpe:2.3:o:microsoft:windows_server_2019:10.0.17763.9020:*:*:*:*:*:*:*",
+    "Value": "Windows Server 2019"
+   },
+   {
+    "ProductID": "11572",
+    "CPE": "cpe:2.3:o:microsoft:windows_server_2019:10.0.17763.9020:*:*:*:*:*:*:*",
+    "Value": "Windows Server 2019 (Server Core installation)"
+   },
+   {
+    "ProductID": "11655",
+    "CPE": "cpe:2.3:a:microsoft:edge_chromium:*:*:*:*:*:*:*:*",
+    "Value": "Microsoft Edge (Chromium-based)"
+   },
+   {
+    "ProductID": "11923",
+    "CPE": "cpe:2.3:o:microsoft:windows_server_2022:10.0.20348.5386:*:*:*:*:*:*:*",
+    "Value": "Windows Server 2022"
+   },
+   {
+    "ProductID": "12436",
+    "CPE": "cpe:2.3:o:microsoft:windows_server_2025:10.0.26100.33158:*:*:*:*:*:*:*",
+    "Value": "Windows Server 2025"
+   },
+   {
+    "ProductID": "12437",
+    "CPE": "cpe:2.3:o:microsoft:windows_server_2025:10.0.26100.33158:*:*:*:*:*:*:*",
+    "Value": "Windows Server 2025 (Server Core installation)"
+   },
+   {
+    "ProductID": "21043",
+    "CPE": "cpe:2.3:a:microsoft:365_copilot_iOS:*:*:*:*:*:*:*:*",
+    "Value": "Microsoft 365 Copilot for iOS"
+   },
+   {
+    "ProductID": "21044",
+    "CPE": "cpe:2.3:a:microsoft:365_copilot_Android:*:*:*:*:*:*:*:*",
+    "Value": "Microsoft 365 Copilot for Android"
+   }
+  ]
+ },
+ "Vulnerability": [
+  {
+   "Title": {
+    "Value": "Active Directory Federation Services Elevation of Privilege Vulnerability"
+   },
+   "Notes": [
+    {
+     "Title": "Description",
+     "Type": 2,
+     "Ordinal": "0",
+     "Value": "<p>Insufficient granularity of access control in Active Directory Federation Services (AD FS) allows an authorized attacker to elevate privileges locally.</p>\n"
+    },
+    {
+     "Title": "FAQ",
+     "Type": 4,
+     "Ordinal": "10",
+     "Value": "<p><strong>What privileges could be gained by an attacker who successfully exploited the vulnerability?</strong></p>\n<p>An attacker who successfully exploited this vulnerability could gain administrator privileges.</p>\n"
+    },
+    {
+     "Title": "Active Directory Federation Services (AD FS)",
+     "Type": 7,
+     "Ordinal": "20",
+     "Value": "Active Directory Federation Services (AD FS)"
+    },
+    {
+     "Title": "Microsoft",
+     "Type": 8,
+     "Ordinal": "30",
+     "Value": "Microsoft"
+    },
+    {
+     "Title": "Customer Action Required",
+     "Type": 6,
+     "Ordinal": "40",
+     "Value": "Yes"
+    }
+   ],
+   "DiscoveryDate": "0001-01-01T00:00:00",
+   "DiscoveryDateSpecified": false,
+   "ReleaseDate": "0001-01-01T00:00:00",
+   "ReleaseDateSpecified": false,
+   "CVE": "CVE-2026-56155",
+   "CWE": [
+    {
+     "ID": "CWE-1220",
+     "Value": "Insufficient Granularity of Access Control"
+    }
+   ],
+   "ProductStatuses": [
+    {
+     "ProductID": [
+      "11568",
+      "11569",
+      "11571",
+      "11572",
+      "11923",
+      "12437",
+      "12436",
+      "10852",
+      "10853",
+      "10816",
+      "10855",
+      "10378",
+      "10379",
+      "10483",
+      "10543"
+     ],
+     "Type": 3
+    }
+   ],
+   "Threats": [
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "11568"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "11569"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "11571"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "11572"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "11923"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "12437"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "12436"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "10852"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "10853"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "10816"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "10855"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "10378"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "10379"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "10483"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Elevation of Privilege"
+     },
+     "ProductID": [
+      "10543"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "11568"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "11569"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "11571"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "11572"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "11923"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "12437"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "12436"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "10852"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "10853"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "10816"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "10855"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "10378"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "10379"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "10483"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Important"
+     },
+     "ProductID": [
+      "10543"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Publicly Disclosed:No;Exploited:Yes;Latest Software Release:Exploitation Detected"
+     },
+     "Type": 1,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    }
+   ],
+   "CVSSScoreSets": [
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "11568"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "11569"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "11571"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "11572"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "11923"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "12437"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "12436"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "10852"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "10853"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "10816"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "10855"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "10378"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "10379"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "10483"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 7.8,
+     "TemporalScore": 7.2,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C",
+     "ProductID": [
+      "10543"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    }
+   ],
+   "Remediations": [
+    {
+     "Description": {
+      "Value": "5099538"
+     },
+     "URL": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5099538",
+     "Supercedence": "5094123",
+     "ProductID": [
+      "11568",
+      "11569",
+      "11571",
+      "11572"
+     ],
+     "Type": 2,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "RestartRequired": {
+      "Value": "Yes"
+     },
+     "SubType": "Security Update",
+     "FixedBuild": "10.0.17763.9020"
+    },
+    {
+     "URL": "https://support.microsoft.com/help/5099538",
+     "ProductID": [
+      "11568",
+      "11569",
+      "11571",
+      "11572"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "SubType": "5099538"
+    },
+    {
+     "Description": {
+      "Value": "5099540"
+     },
+     "URL": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5099540",
+     "Supercedence": "5094128",
+     "ProductID": [
+      "11923"
+     ],
+     "Type": 2,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "RestartRequired": {
+      "Value": "Yes"
+     },
+     "SubType": "Security Update",
+     "FixedBuild": "10.0.20348.5386"
+    },
+    {
+     "URL": "https://support.microsoft.com/help/5099540",
+     "ProductID": [
+      "11923"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "SubType": "5099540"
+    },
+    {
+     "Description": {
+      "Value": "5099540"
+     },
+     "URL": "https://support.microsoft.com/help/5099540",
+     "ProductID": [
+      "11923"
+     ],
+     "Type": 6,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": []
+    },
+    {
+     "Description": {
+      "Value": "5099536"
+     },
+     "URL": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5099536",
+     "Supercedence": "5094125",
+     "ProductID": [
+      "12437",
+      "12436"
+     ],
+     "Type": 2,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "RestartRequired": {
+      "Value": "Yes"
+     },
+     "SubType": "Security Update",
+     "FixedBuild": "10.0.26100.33158"
+    },
+    {
+     "URL": "https://support.microsoft.com/help/5099536",
+     "ProductID": [
+      "12437",
+      "12436"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "SubType": "5099536"
+    },
+    {
+     "Description": {
+      "Value": "5099536"
+     },
+     "URL": "https://support.microsoft.com/help/5099536",
+     "ProductID": [
+      "12437",
+      "12436"
+     ],
+     "Type": 6,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": []
+    },
+    {
+     "Description": {
+      "Value": "5099535"
+     },
+     "URL": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5099535",
+     "Supercedence": "5094122",
+     "ProductID": [
+      "10852",
+      "10853",
+      "10816",
+      "10855"
+     ],
+     "Type": 2,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "RestartRequired": {
+      "Value": "Yes"
+     },
+     "SubType": "Security Update",
+     "FixedBuild": "10.0.14393.9339"
+    },
+    {
+     "URL": "https://support.microsoft.com/help/5099535",
+     "ProductID": [
+      "10852",
+      "10853",
+      "10816",
+      "10855"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "SubType": "5099535"
+    },
+    {
+     "Description": {
+      "Value": "5099445"
+     },
+     "URL": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5099445",
+     "Supercedence": "5094042",
+     "ProductID": [
+      "10378",
+      "10379"
+     ],
+     "Type": 2,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "RestartRequired": {
+      "Value": "Yes"
+     },
+     "SubType": "Monthly Rollup",
+     "FixedBuild": "6.2.9200.26226"
+    },
+    {
+     "URL": "https://support.microsoft.com/help/5099445",
+     "ProductID": [
+      "10378",
+      "10379"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "SubType": "5099445"
+    },
+    {
+     "Description": {
+      "Value": "5099445"
+     },
+     "URL": "https://support.microsoft.com/help/5099445",
+     "ProductID": [
+      "10378",
+      "10379"
+     ],
+     "Type": 6,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": []
+    },
+    {
+     "Description": {
+      "Value": "5099444"
+     },
+     "URL": "https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5099444",
+     "Supercedence": "5094041",
+     "ProductID": [
+      "10483",
+      "10543"
+     ],
+     "Type": 2,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "RestartRequired": {
+      "Value": "Yes"
+     },
+     "SubType": "Monthly Rollup",
+     "FixedBuild": "6.3.9600.23291"
+    },
+    {
+     "URL": "https://support.microsoft.com/help/5099444",
+     "ProductID": [
+      "10483",
+      "10543"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "SubType": "5099444"
+    },
+    {
+     "Description": {
+      "Value": "5099444"
+     },
+     "URL": "https://support.microsoft.com/help/5099444",
+     "ProductID": [
+      "10483",
+      "10543"
+     ],
+     "Type": 6,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": []
+    }
+   ],
+   "Acknowledgments": [
+    {
+     "Name": [
+      {
+       "Value": "Scott Clark (DART) with <a href=\"https://www.microsoft.com/\">Microsoft</a>"
+      }
+     ],
+     "URL": [
+      ""
+     ]
+    },
+    {
+     "Name": [
+      {
+       "Value": "Jeremy Kingston (DART) with <a href=\"https://www.microsoft.com/\">Microsoft</a>"
+      }
+     ],
+     "URL": [
+      ""
+     ]
+    }
+   ],
+   "Ordinal": "990",
+   "RevisionHistory": [
+    {
+     "Number": "1.0",
+     "Date": "2026-07-14T07:00:00",
+     "Description": {
+      "Value": "<p>Information published.</p>\n"
+     }
+    }
+   ]
+  },
+  {
+   "Title": {
+    "Value": "Microsoft Copilot Remote Code Execution Vulnerability"
+   },
+   "Notes": [
+    {
+     "Title": "Description",
+     "Type": 2,
+     "Ordinal": "0",
+     "Value": "<p>Improper neutralization of special elements used in a command ('command injection') in Microsoft Copilot allows an unauthorized attacker to execute code over a network.</p>\n"
+    },
+    {
+     "Title": "FAQ",
+     "Type": 4,
+     "Ordinal": "10",
+     "Value": "<p><strong>According to the CVSS metric, a successful exploitation could lead to a scope change (S:C). What does this mean for this vulnerability?</strong></p>\n<p>In this case, a successful attack could be performed from a low privilege Hyper-V guest. The attacker could traverse the guest's security boundary to execute code on the Hyper-V host execution environment.</p>\n"
+    },
+    {
+     "Title": "FAQ",
+     "Type": 4,
+     "Ordinal": "10",
+     "Value": "<p><strong>How could an attacker exploit this vulnerability?</strong></p>\n<p>An attacker could host a malicious website that causes Microsoft Edge for Android to automatically send crafted prompts to Copilot on a user\u2019s device when the user visits the site. Because the affected component processes these requests without confirmation or origin checks, the prompts may be executed without the user\u2019s awareness, potentially resulting in unintended actions within Copilot such as accessing or modifying data.</p>\n"
+    },
+    {
+     "Title": "Microsoft Copilot",
+     "Type": 7,
+     "Ordinal": "20",
+     "Value": "Microsoft Copilot"
+    },
+    {
+     "Title": "Microsoft",
+     "Type": 8,
+     "Ordinal": "30",
+     "Value": "Microsoft"
+    },
+    {
+     "Title": "Customer Action Required",
+     "Type": 6,
+     "Ordinal": "40",
+     "Value": "Yes"
+    }
+   ],
+   "DiscoveryDate": "0001-01-01T00:00:00",
+   "DiscoveryDateSpecified": false,
+   "ReleaseDate": "0001-01-01T00:00:00",
+   "ReleaseDateSpecified": false,
+   "CVE": "CVE-2026-48561",
+   "CWE": [
+    {
+     "ID": "CWE-77",
+     "Value": "Improper Neutralization of Special Elements used in a Command ('Command Injection')"
+    }
+   ],
+   "ProductStatuses": [
+    {
+     "ProductID": [
+      "21044",
+      "21043"
+     ],
+     "Type": 3
+    }
+   ],
+   "Threats": [
+    {
+     "Description": {
+      "Value": "Remote Code Execution"
+     },
+     "ProductID": [
+      "21044"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Remote Code Execution"
+     },
+     "ProductID": [
+      "21043"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Critical"
+     },
+     "ProductID": [
+      "21044"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Critical"
+     },
+     "ProductID": [
+      "21043"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Publicly Disclosed:No;Exploited:No;Latest Software Release:Exploitation Less Likely"
+     },
+     "Type": 1,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    }
+   ],
+   "CVSSScoreSets": [
+    {
+     "BaseScore": 9.6,
+     "TemporalScore": 8.3,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H/E:U/RL:O/RC:C",
+     "ProductID": [
+      "21044"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    },
+    {
+     "BaseScore": 9.6,
+     "TemporalScore": 8.3,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H/E:U/RL:O/RC:C",
+     "ProductID": [
+      "21043"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    }
+   ],
+   "Remediations": [
+    {
+     "Description": {
+      "Value": "Release Notes"
+     },
+     "URL": "https://play.google.com/store/apps/details?id=com.microsoft.emmx&hl=en_US&pli=1",
+     "ProductID": [
+      "21044"
+     ],
+     "Type": 2,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "RestartRequired": {
+      "Value": "Maybe"
+     },
+     "SubType": "Security Update"
+    },
+    {
+     "URL": "https://play.google.com/store/apps/details?id=com.microsoft.emmx&hl=en_US&pli=1",
+     "ProductID": [
+      "21044"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "SubType": "Release Notes"
+    },
+    {
+     "Description": {
+      "Value": "Release Notes"
+     },
+     "URL": "https://apps.apple.com/us/app/microsoft-edge/id1288723196",
+     "ProductID": [
+      "21043"
+     ],
+     "Type": 2,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "RestartRequired": {
+      "Value": "Maybe"
+     },
+     "SubType": "Security Update"
+    },
+    {
+     "URL": "https://apps.apple.com/us/app/microsoft-edge/id1288723196",
+     "ProductID": [
+      "21043"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "SubType": "Release Notes"
+    }
+   ],
+   "Acknowledgments": [
+    {
+     "Name": [
+      {
+       "Value": "Ofek Levin Enclave with <a href=\"https://enclave.ai/\">Enclave</a>"
+      }
+     ],
+     "URL": [
+      ""
+     ]
+    }
+   ],
+   "Ordinal": "523",
+   "RevisionHistory": [
+    {
+     "Number": "1.0",
+     "Date": "2026-07-14T07:00:00",
+     "Description": {
+      "Value": "<p>Information published.</p>\n"
+     }
+    }
+   ]
+  },
+  {
+   "Title": {
+    "Value": "Microsoft Edge (Chromium-based) Spoofing Vulnerability"
+   },
+   "Notes": [
+    {
+     "Title": "Description",
+     "Type": 2,
+     "Ordinal": "0",
+     "Value": "<p>User interface (ui) misrepresentation of critical information in Microsoft Edge (Chromium-based) allows an unauthorized attacker to perform spoofing over a network.</p>\n"
+    },
+    {
+     "Title": "FAQ",
+     "Type": 4,
+     "Ordinal": "10",
+     "Value": "<p><strong>According to the CVSS metric, the attack complexity is high (AC:H). What does that mean for this vulnerability?</strong></p>\n<p>The attacker must correctly craft convincing spoofed UI chrome, time the full-screen entry, and rely on user perception. While the exploit triggers reliably after a gesture, successful deception depends on careful social engineering and realistic mimicking of browser UI.</p>\n"
+    },
+    {
+     "Title": "FAQ",
+     "Type": 4,
+     "Ordinal": "10",
+     "Value": "<p><strong>According to the CVSS metric, user interaction is required (UI:R). What interaction would the user have to do?</strong></p>\n<p>The user would need to click on a specially crafted URL that could present a popup box requesting additional user input.</p>\n"
+    },
+    {
+     "Title": "FAQ",
+     "Type": 4,
+     "Ordinal": "10",
+     "Value": "<p><strong>How could an attacker exploit this vulnerability via the Network?</strong></p>\n<p>An attacker could host a specially crafted website designed to exploit the vulnerability through Microsoft Edge and then convince a user to view the website. However, in all cases an attacker would have no way to force a user to view the attacker-controlled content. Instead, an attacker would have to convince a user to take action, typically by an enticement in an email or instant message, or by getting the user to open an attachment sent through email.</p>\n"
+    },
+    {
+     "Title": "FAQ",
+     "Type": 4,
+     "Ordinal": "10",
+     "Value": "<p><strong>What is the version information for this release?</strong></p>\n<table>\n<thead>\n<tr>\n<th>Microsoft Edge Version</th>\n<th>Date Released</th>\n<th>Based on Chromium Version</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>150.0.4078.48</td>\n<td>07/03/2026</td>\n<td>150.0.7871.47</td>\n</tr>\n</tbody>\n</table>\n"
+    },
+    {
+     "Title": "Microsoft Edge (Chromium-based)",
+     "Type": 7,
+     "Ordinal": "20",
+     "Value": "Microsoft Edge (Chromium-based)"
+    },
+    {
+     "Title": "Microsoft",
+     "Type": 8,
+     "Ordinal": "30",
+     "Value": "Microsoft"
+    },
+    {
+     "Title": "Customer Action Required",
+     "Type": 6,
+     "Ordinal": "40",
+     "Value": "Yes"
+    }
+   ],
+   "DiscoveryDate": "0001-01-01T00:00:00",
+   "DiscoveryDateSpecified": false,
+   "ReleaseDate": "0001-01-01T00:00:00",
+   "ReleaseDateSpecified": false,
+   "CVE": "CVE-2026-45488",
+   "CWE": [
+    {
+     "ID": "CWE-451",
+     "Value": "User Interface (UI) Misrepresentation of Critical Information"
+    }
+   ],
+   "ProductStatuses": [
+    {
+     "ProductID": [
+      "11655"
+     ],
+     "Type": 3
+    }
+   ],
+   "Threats": [
+    {
+     "Description": {
+      "Value": "Spoofing"
+     },
+     "ProductID": [
+      "11655"
+     ],
+     "Type": 0,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Moderate"
+     },
+     "ProductID": [
+      "11655"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    },
+    {
+     "Description": {
+      "Value": "Publicly Disclosed:No;Exploited:No;Latest Software Release:N/A"
+     },
+     "Type": 1,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false
+    }
+   ],
+   "CVSSScoreSets": [
+    {
+     "BaseScore": 5.4,
+     "TemporalScore": 4.7,
+     "EnvironmentalScore": 0,
+     "Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N/E:U/RL:O/RC:C",
+     "ProductID": [
+      "11655"
+     ],
+     "IsTemporalScoreFieldSpecified": false
+    }
+   ],
+   "Remediations": [
+    {
+     "Description": {
+      "Value": "Release Notes"
+     },
+     "URL": "",
+     "ProductID": [
+      "11655"
+     ],
+     "Type": 2,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "RestartRequired": {
+      "Value": "No"
+     },
+     "SubType": "Security Update",
+     "FixedBuild": "150.0.4078.48"
+    },
+    {
+     "URL": "https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security",
+     "ProductID": [
+      "11655"
+     ],
+     "Type": 3,
+     "Date": "0001-01-01T00:00:00",
+     "DateSpecified": false,
+     "AffectedFiles": [],
+     "SubType": "Release Notes"
+    }
+   ],
+   "Acknowledgments": [
+    {
+     "Name": [
+      {
+       "Value": "Moch. Azril"
+      }
+     ],
+     "URL": [
+      ""
+     ]
+    },
+    {
+     "Name": [
+      {
+       "Value": "<a href=\"https://www.linkedin.com/in/barathstalin/\">Barath Stalin K</a>"
+      }
+     ],
+     "URL": [
+      ""
+     ]
+    },
+    {
+     "Name": [
+      {
+       "Value": "<a href=\"https://www.linkedin.com/in/hafiizh-7aa6bb31/\">Hafiizh</a> with https://www.linkedin.com/in/hafiizh-7aa6bb31/"
+      }
+     ],
+     "URL": [
+      ""
+     ]
+    },
+    {
+     "Name": [
+      {
+       "Value": "FARISSAL B"
+      }
+     ],
+     "URL": [
+      ""
+     ]
+    },
+    {
+     "Name": [
+      {
+       "Value": "<a href=\"https://www.linkedin.com/in/francesco-topol-64857a264/\">Francesco Jeremy Topol</a> with k4tedu"
+      }
+     ],
+     "URL": [
+      ""
+     ]
+    },
+    {
+     "Name": [
+      {
+       "Value": "<a href=\"https://www.linkedin.com/in/alfazhossain/\">Alfaz Hossain</a> with <a href=\"https://piratesofthedeadflag.com/\">POTDF</a>"
+      }
+     ],
+     "URL": [
+      ""
+     ]
+    },
+    {
+     "Name": [
+      {
+       "Value": "<a href=\"https://x.com/zxyhellzing\">xzyhellsing</a>"
+      }
+     ],
+     "URL": [
+      ""
+     ]
+    }
+   ],
+   "Ordinal": "506",
+   "RevisionHistory": [
+    {
+     "Number": "1.0",
+     "Date": "2026-07-03T07:00:00",
+     "Description": {
+      "Value": "<p>Information published.</p>\n"
+     }
+    }
+   ]
+  }
+ ]
+}
