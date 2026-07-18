@@ -309,10 +309,17 @@ def test_collect_updates_full_cves_merges_notable(mock_fetch):
     # notable flag/wording is preserved.
     assert cves["CVE-2026-56155"]['notable'] is True
     assert cves["CVE-2026-56155"]['exploitation'] == "Exploitation Detected"
-    # CVE-2026-50661 is notable but not in the CVRF fixture; it must survive so
-    # full mode never shows fewer highlighted CVEs than the default.
+    # CVE-2026-50661 is notable ("Publicly Known") but not in the CVRF fixture;
+    # it must survive so full mode never shows fewer highlighted CVEs than the
+    # default, promoted to the full schema with consistent booleans.
     assert "CVE-2026-50661" in cves
-    assert cves["CVE-2026-50661"]['notable'] is True
+    preserved = cves["CVE-2026-50661"]
+    assert preserved['notable'] is True
+    assert preserved['publicly_disclosed'] is True
+    assert preserved['exploited'] is False
+    assert preserved['exploitation'] == "Publicly Disclosed"
+    # Uniform full-mode schema: same keys as a CVRF-sourced entry.
+    assert set(preserved) == set(cves["CVE-2026-56155"])
 
 
 # When the release note flags a CVE the CVRF record hasn't caught up to, the

@@ -231,6 +231,26 @@ def _exploitation_label(exploited, publicly_disclosed):
     return None
 
 
+# Promote a notable-only CVE (release-note tier: id/title/notable/exploitation)
+# to the full CVRF schema, deriving the booleans from its wording. Used in full
+# mode for CVEs the release note flags but the CVRF document doesn't list, so
+# the full-mode output has one uniform shape.
+def _notable_to_full(cve):
+    exploited, publicly_disclosed = _notable_flags(cve.get('exploitation'))
+    return {
+        "id": cve['id'],
+        "title": cve.get('title'),
+        "severity": None,
+        "impact": None,
+        "cvss": None,
+        "exploited": exploited,
+        "publicly_disclosed": publicly_disclosed,
+        "exploitation": _exploitation_label(exploited, publicly_disclosed),
+        "notable": True,
+        "products": [],
+    }
+
+
 # Map product id -> sorted list of KB numbers fixing it, from the vulnerability's
 # KB-numbered Remediations.
 def _kbs_by_product_id(vuln):
@@ -365,10 +385,11 @@ def _cves_for_update(update, notable, include_full_cves, cvrf_cache, timeout):
         merged.append(entry)
 
     # Preserve notable CVEs that the CVRF document doesn't list, so full mode
-    # never shows fewer highlighted CVEs than the default.
+    # never shows fewer highlighted CVEs than the default. Promote them to the
+    # full schema so their booleans are consistent and the output is uniform.
     for cve in notable:
         if cve['id'] not in full_ids:
-            merged.append(cve)
+            merged.append(_notable_to_full(cve))
     return merged
 
 
