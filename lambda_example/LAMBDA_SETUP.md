@@ -21,8 +21,13 @@ AWS Lambda requires dependencies to be packaged with your script in a `.zip` fil
     pip install requests beautifulsoup4 -t .
     ```
 
-3. **Copy the Python script into the same directory**:
-    Ensure that the file `ms_patch_tuesday_fetcher_lambda.py` is inside the `lambda_package` directory.
+3. **Copy the handler and the shared package into the same directory**:
+    The handler imports its fetch/parse logic from the `ms_patch_tuesday_fetcher` package, so both must be in the zip. Copy the handler `ms_patch_tuesday_fetcher_lambda.py` **and** the `ms_patch_tuesday_fetcher/` package directory (which contains `core.py`) into the `lambda_package` directory, e.g.:
+
+    ```bash
+    cp path/to/repo/lambda_example/ms_patch_tuesday_fetcher_lambda.py .
+    cp -r path/to/repo/ms_patch_tuesday_fetcher .
+    ```
 
 4. **Create a zip file containing the script and its dependencies**:
 
