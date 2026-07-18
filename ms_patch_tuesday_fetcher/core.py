@@ -358,12 +358,15 @@ def _cves_for_update(update, notable, include_full_cves, cvrf_cache, timeout):
     if not include_full_cves:
         return notable
 
+    # On any fallback (unresolvable month or failed fetch) still emit the full
+    # schema, so `--full-cves` output has one uniform shape regardless of the
+    # network outcome and consumers can rely on the full set of keys.
     doc_id = release_to_cvrf_id(update)
     if doc_id is None:
-        return notable
+        return [_notable_to_full(cve) for cve in notable]
     full_cves = _cvrf_cves(doc_id, cvrf_cache, timeout)
     if full_cves is None:
-        return notable
+        return [_notable_to_full(cve) for cve in notable]
 
     # Merge the release note's "Notable Item" wording onto the matching CVRF
     # entries. The release note can flag a CVE the CVRF record hasn't caught up

@@ -380,13 +380,22 @@ def test_collect_updates_full_cves_caches_and_isolates(mock_fetch):
     assert b["CVE-2026-48561"]['exploitation'] is None
 
 
-# If the CVRF fetch fails, full mode falls back to the notable subset.
+# If the CVRF fetch fails, full mode still returns the notable subset, promoted
+# to the full schema so --full-cves output is uniform regardless of fetch outcome.
 @patch('ms_patch_tuesday_fetcher.core.fetch_cvrf_document', return_value=None)
 def test_collect_updates_full_cves_falls_back(mock_fetch):
     update = {"title": "July 2026", "releaseDate": "2026-07-14T07:00:00Z", "description": DESCRIPTION_WITH_CVES}
     results = collect_updates([update], include_full_cves=True)
 
-    assert [c['id'] for c in results[0]['cves']] == ["CVE-2026-56155", "CVE-2026-50661"]
+    cves = results[0]['cves']
+    assert [c['id'] for c in cves] == ["CVE-2026-56155", "CVE-2026-50661"]
+    # Full schema even on the fallback path (keys match a CVRF-sourced entry).
+    full_keys = {"id", "title", "severity", "impact", "cvss", "exploited",
+                 "publicly_disclosed", "exploitation", "notable", "products"}
+    assert all(set(c) == full_keys for c in cves)
+    # Notable wording is reflected in the booleans.
+    assert cves[0]['exploited'] is True                 # "Exploitation Detected"
+    assert cves[1]['publicly_disclosed'] is True        # "Publicly Known"
 
 
 # filter_reports_by_product narrows KBs and (full-mode) CVE products by name.
