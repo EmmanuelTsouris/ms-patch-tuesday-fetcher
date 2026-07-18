@@ -213,6 +213,24 @@ def _exploit_flags(threats):
     return exploited, publicly_disclosed
 
 
+# Interpret a release-note "Notable Item" label (e.g. "Exploitation Detected",
+# "Publicly Known") as (exploited, publicly_disclosed) flags, so a highlighted
+# CVE's booleans agree with its notable status.
+def _notable_flags(label):
+    text = (label or '').lower()
+    return 'exploit' in text, 'public' in text
+
+
+# The human-readable exploitation label derived from the two flags, so the
+# label and the booleans never disagree. Exploitation outranks disclosure.
+def _exploitation_label(exploited, publicly_disclosed):
+    if exploited:
+        return "Exploitation Detected"
+    if publicly_disclosed:
+        return "Publicly Disclosed"
+    return None
+
+
 # Map product id -> sorted list of KB numbers fixing it, from the vulnerability's
 # KB-numbered Remediations.
 def _kbs_by_product_id(vuln):
@@ -236,20 +254,25 @@ def _affected_products(vuln, product_names):
     kbs_by_pid = _kbs_by_product_id(vuln)
 
     # All affected product ids, from ProductStatuses, plus any product that only
-    # a KB remediation references (defensive), preserving first-seen order.
-    affected = []
+    # a KB remediation references (defensive). A seen-set keeps membership O(1)
+    # while the list preserves first-seen order.
+    affected, seen_pids = [], set()
     for status in vuln.get('ProductStatuses', []):
-        affected.extend(str(pid) for pid in status.get('ProductID', []))
-    affected.extend(pid for pid in kbs_by_pid if pid not in affected)
+        for pid in status.get('ProductID', []):
+            pid = str(pid)
+            if pid not in seen_pids:
+                seen_pids.add(pid)
+                affected.append(pid)
+    for pid in kbs_by_pid:
+        if pid not in seen_pids:
+            seen_pids.add(pid)
+            affected.append(pid)
 
-    products, seen = [], set()
+    products = []
     for pid in affected:
         # One entry per (product, kb); products with no KB fix get kb=None.
         for kb in (kbs_by_pid.get(pid) or [None]):
-            key = (pid, kb)
-            if key not in seen:
-                seen.add(key)
-                products.append({"product": product_names.get(pid, pid), "kb": kb})
+            products.append({"product": product_names.get(pid, pid), "kb": kb})
     return products
 
 
@@ -264,13 +287,6 @@ def _cve_from_vuln(vuln, product_names):
     scores = [s.get('BaseScore') for s in vuln.get('CVSSScoreSets', []) if s.get('BaseScore') is not None]
     cvss = max(scores) if scores else None
 
-    if exploited:
-        exploitation = "Exploitation Detected"
-    elif publicly_disclosed:
-        exploitation = "Publicly Disclosed"
-    else:
-        exploitation = None
-
     return {
         "id": vuln.get('CVE'),
         "title": _node_value(vuln.get('Title')),
@@ -279,7 +295,7 @@ def _cve_from_vuln(vuln, product_names):
         "cvss": cvss,
         "exploited": exploited,
         "publicly_disclosed": publicly_disclosed,
-        "exploitation": exploitation,
+        "exploitation": _exploitation_label(exploited, publicly_disclosed),
         "notable": exploited or publicly_disclosed,
         "products": _affected_products(vuln, product_names),
     }
@@ -330,7 +346,10 @@ def _cves_for_update(update, notable, include_full_cves, cvrf_cache, timeout):
         return notable
 
     # Merge the release note's "Notable Item" wording onto the matching CVRF
-    # entries. Copy each cached dict so the shared cache is never mutated.
+    # entries. The release note can flag a CVE the CVRF record hasn't caught up
+    # to, so fold its wording into the exploited/publicly_disclosed flags and
+    # keep exploitation consistent with them. Copy each cached dict so the
+    # shared cache is never mutated.
     notable_labels = {cve['id']: cve.get('exploitation') for cve in notable}
     merged = []
     full_ids = set()
@@ -339,8 +358,10 @@ def _cves_for_update(update, notable, include_full_cves, cvrf_cache, timeout):
         entry = dict(cve)
         if cve['id'] in notable_labels:
             entry['notable'] = True
-            if notable_labels[cve['id']]:
-                entry['exploitation'] = notable_labels[cve['id']]
+            note_exploited, note_disclosed = _notable_flags(notable_labels[cve['id']])
+            entry['exploited'] = entry['exploited'] or note_exploited
+            entry['publicly_disclosed'] = entry['publicly_disclosed'] or note_disclosed
+            entry['exploitation'] = _exploitation_label(entry['exploited'], entry['publicly_disclosed'])
         merged.append(entry)
 
     # Preserve notable CVEs that the CVRF document doesn't list, so full mode
