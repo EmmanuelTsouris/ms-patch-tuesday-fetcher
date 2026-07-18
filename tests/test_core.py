@@ -251,6 +251,46 @@ def test_extract_cves_reports_non_kb_products():
     assert filter_reports_by_product(reports, "Microsoft Edge")
 
 
+# A product with an explicit null Value falls back to its id and never becomes
+# None, so product filtering can't crash on it.
+def test_extract_cves_handles_null_product_value():
+    doc = {
+        "ProductTree": {"FullProductName": [{"ProductID": "1", "Value": None}]},
+        "Vulnerability": [{
+            "CVE": "CVE-2026-1", "Title": {"Value": "x"},
+            "ProductStatuses": [{"ProductID": ["1"], "Type": 3}],
+        }],
+    }
+    cves = extract_cves_from_cvrf(doc)
+    assert cves[0]['products'] == [{"product": "1", "kb": None}]
+    # The product filter must not raise on the (formerly None) product name.
+    reports = [{"title": "t", "release_date": "d", "kb_articles": [], "cves": cves}]
+    assert filter_reports_by_product(reports, "nope") == []
+
+
+# KB numbers are stored stripped, matching the validated form.
+def test_extract_cves_strips_kb_whitespace():
+    doc = {
+        "ProductTree": {"FullProductName": [{"ProductID": "1", "Value": "Windows"}]},
+        "Vulnerability": [{
+            "CVE": "CVE-2026-2", "Title": {"Value": "x"},
+            "ProductStatuses": [{"ProductID": ["1"], "Type": 3}],
+            "Remediations": [{"Description": {"Value": " 5099536 "}, "ProductID": ["1"]}],
+        }],
+    }
+    assert extract_cves_from_cvrf(doc)[0]['products'] == [{"product": "Windows", "kb": "5099536"}]
+
+
+# A legitimate CVSS base score of 0.0 is preserved, not treated as missing.
+def test_extract_cves_keeps_zero_cvss():
+    doc = {
+        "ProductTree": {"FullProductName": []},
+        "Vulnerability": [{"CVE": "CVE-2026-3", "Title": {"Value": "x"},
+                           "CVSSScoreSets": [{"BaseScore": 0.0}]}],
+    }
+    assert extract_cves_from_cvrf(doc)[0]['cvss'] == 0.0
+
+
 # In full-CVE mode, collect_updates fetches the CVRF document (mocked) and
 # carries the release-note's notable wording onto the matching CVE.
 @patch('ms_patch_tuesday_fetcher.core.fetch_cvrf_document')

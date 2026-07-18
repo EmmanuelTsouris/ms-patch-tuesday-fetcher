@@ -221,8 +221,9 @@ def _kbs_by_product_id(vuln):
         kb = _node_value(remediation.get('Description'))
         if not kb or not str(kb).strip().isdigit():
             continue
+        kb = str(kb).strip()  # store the validated (stripped) form
         for pid in remediation.get('ProductID', []):
-            kbs_by_pid.setdefault(str(pid), set()).add(str(kb))
+            kbs_by_pid.setdefault(str(pid), set()).add(kb)
     return {pid: sorted(kbs) for pid, kbs in kbs_by_pid.items()}
 
 
@@ -260,7 +261,7 @@ def _cve_from_vuln(vuln, product_names):
     impact = next((_node_value(t.get('Description')) for t in threats if t.get('Type') == 0), None)
     exploited, publicly_disclosed = _exploit_flags(threats)
 
-    scores = [s.get('BaseScore') for s in vuln.get('CVSSScoreSets', []) if s.get('BaseScore')]
+    scores = [s.get('BaseScore') for s in vuln.get('CVSSScoreSets', []) if s.get('BaseScore') is not None]
     cvss = max(scores) if scores else None
 
     if exploited:
@@ -292,7 +293,9 @@ def extract_cves_from_cvrf(cvrf_doc):
     for product in cvrf_doc.get('ProductTree', {}).get('FullProductName', []):
         pid = product.get('ProductID')
         if pid is not None:
-            product_names[str(pid)] = product.get('Value', str(pid))
+            # `or str(pid)` also covers an explicit null Value, which get()'s
+            # default does not; keeps product names always non-None strings.
+            product_names[str(pid)] = product.get('Value') or str(pid)
 
     return [
         _cve_from_vuln(vuln, product_names)
