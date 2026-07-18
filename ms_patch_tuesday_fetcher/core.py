@@ -215,10 +215,14 @@ def _exploit_flags(threats):
 
 # Interpret a release-note "Notable Item" label (e.g. "Exploitation Detected",
 # "Publicly Known") as (exploited, publicly_disclosed) flags, so a highlighted
-# CVE's booleans agree with its notable status.
+# CVE's booleans agree with its notable status. Matches the specific labels
+# rather than any "exploit"/"public" substring, so exploitability forecasts
+# ("Exploitation More/Less Likely") are not misread as confirmed exploitation.
 def _notable_flags(label):
     text = (label or '').lower()
-    return 'exploit' in text, 'public' in text
+    exploited = 'exploitation detected' in text or 'exploited' in text
+    publicly_disclosed = 'publicly known' in text or 'publicly disclosed' in text
+    return exploited, publicly_disclosed
 
 
 # The human-readable exploitation label derived from the two flags, so the
@@ -231,24 +235,34 @@ def _exploitation_label(exploited, publicly_disclosed):
     return None
 
 
+# Single source of truth for a full-schema CVE dict, so every builder produces
+# the same keys. `exploitation` and `notable` are derived unless overridden
+# (notable is forced True for release-note entries, whatever the wording).
+def _cve_record(cve_id, title, severity=None, impact=None, cvss=None,
+                exploited=False, publicly_disclosed=False, products=None, notable=None):
+    return {
+        "id": cve_id,
+        "title": title,
+        "severity": severity,
+        "impact": impact,
+        "cvss": cvss,
+        "exploited": exploited,
+        "publicly_disclosed": publicly_disclosed,
+        "exploitation": _exploitation_label(exploited, publicly_disclosed),
+        "notable": (exploited or publicly_disclosed) if notable is None else notable,
+        "products": [] if products is None else products,
+    }
+
+
 # Promote a notable-only CVE (release-note tier: id/title/notable/exploitation)
 # to the full CVRF schema, deriving the booleans from its wording. Used in full
 # mode for CVEs the release note flags but the CVRF document doesn't list, so
 # the full-mode output has one uniform shape.
 def _notable_to_full(cve):
     exploited, publicly_disclosed = _notable_flags(cve.get('exploitation'))
-    return {
-        "id": cve['id'],
-        "title": cve.get('title'),
-        "severity": None,
-        "impact": None,
-        "cvss": None,
-        "exploited": exploited,
-        "publicly_disclosed": publicly_disclosed,
-        "exploitation": _exploitation_label(exploited, publicly_disclosed),
-        "notable": True,
-        "products": [],
-    }
+    return _cve_record(cve['id'], cve.get('title'),
+                       exploited=exploited, publicly_disclosed=publicly_disclosed,
+                       notable=True)
 
 
 # Map product id -> sorted list of KB numbers fixing it, from the vulnerability's
@@ -307,18 +321,12 @@ def _cve_from_vuln(vuln, product_names):
     scores = [s.get('BaseScore') for s in vuln.get('CVSSScoreSets', []) if s.get('BaseScore') is not None]
     cvss = max(scores) if scores else None
 
-    return {
-        "id": vuln.get('CVE'),
-        "title": _node_value(vuln.get('Title')),
-        "severity": severity,
-        "impact": impact,
-        "cvss": cvss,
-        "exploited": exploited,
-        "publicly_disclosed": publicly_disclosed,
-        "exploitation": _exploitation_label(exploited, publicly_disclosed),
-        "notable": exploited or publicly_disclosed,
-        "products": _affected_products(vuln, product_names),
-    }
+    return _cve_record(
+        vuln.get('CVE'), _node_value(vuln.get('Title')),
+        severity=severity, impact=impact, cvss=cvss,
+        exploited=exploited, publicly_disclosed=publicly_disclosed,
+        products=_affected_products(vuln, product_names),
+    )
 
 
 # Extract the full per-CVE detail from a CVRF document: severity, impact, CVSS
@@ -438,7 +446,10 @@ def filter_reports_by_product(reports, pattern):
         cves = []
         for cve in report.get('cves', []):
             products = cve.get('products')
-            if products is None:
+            if not products:
+                # No product data (notable-only, or a highlighted CVE the CVRF
+                # doc doesn't list) — fall back to matching on the title so it
+                # isn't silently dropped from a filtered report.
                 if needle in (cve.get('title') or '').lower():
                     cves.append(cve)
             else:
