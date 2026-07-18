@@ -227,6 +227,30 @@ def test_extract_cves_from_cvrf():
     assert critical['notable'] is False
 
 
+# Products fixed without a KB article (auto-updating apps like Edge/Copilot)
+# are still reported from ProductStatuses, with kb=None, so product filtering
+# and rendering don't silently drop them.
+def test_extract_cves_reports_non_kb_products():
+    with open(os.path.join(FIXTURES, "cvrf_sample.json")) as f:
+        doc = json.load(f)
+    cves = {c['id']: c for c in extract_cves_from_cvrf(doc)}
+
+    # CVE-2026-45488 affects Microsoft Edge, which has no KB fix.
+    edge = cves["CVE-2026-45488"]
+    assert edge['products'], "expected affected products even without a KB"
+    assert any("Edge" in p['product'] for p in edge['products'])
+    assert all(p['kb'] is None for p in edge['products'])
+
+    # Copilot (CVE-2026-48561) likewise: affected products, no KB.
+    copilot = cves["CVE-2026-48561"]
+    assert copilot['products']
+    assert all(p['kb'] is None for p in copilot['products'])
+
+    # Such CVEs are now reachable by a product filter.
+    reports = [{"title": "t", "release_date": "d", "kb_articles": [], "cves": [edge]}]
+    assert filter_reports_by_product(reports, "Microsoft Edge")
+
+
 # In full-CVE mode, collect_updates fetches the CVRF document (mocked) and
 # carries the release-note's notable wording onto the matching CVE.
 @patch('ms_patch_tuesday_fetcher.core.fetch_cvrf_document')

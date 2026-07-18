@@ -213,20 +213,42 @@ def _exploit_flags(threats):
     return exploited, publicly_disclosed
 
 
-# Build the list of affected {product, kb} pairs from a vulnerability's
-# Remediations (those whose Description is a KB number), resolving product IDs
-# to names via the supplied map.
-def _affected_products(vuln, product_names):
-    products, seen = [], set()
+# Map product id -> sorted list of KB numbers fixing it, from the vulnerability's
+# KB-numbered Remediations.
+def _kbs_by_product_id(vuln):
+    kbs_by_pid = {}
     for remediation in vuln.get('Remediations', []):
         kb = _node_value(remediation.get('Description'))
         if not kb or not str(kb).strip().isdigit():
             continue
         for pid in remediation.get('ProductID', []):
-            key = (str(pid), str(kb))
+            kbs_by_pid.setdefault(str(pid), set()).add(str(kb))
+    return {pid: sorted(kbs) for pid, kbs in kbs_by_pid.items()}
+
+
+# Build the list of affected {product, kb} pairs for a vulnerability. Affected
+# products come from ProductStatuses (authoritative), so products fixed without
+# a KB article (e.g. auto-updating apps like Edge/Copilot) are still reported —
+# with kb=None. KB numbers are attached per product from the Remediations whose
+# Description is a KB number. Product IDs are resolved to names via the map.
+def _affected_products(vuln, product_names):
+    kbs_by_pid = _kbs_by_product_id(vuln)
+
+    # All affected product ids, from ProductStatuses, plus any product that only
+    # a KB remediation references (defensive), preserving first-seen order.
+    affected = []
+    for status in vuln.get('ProductStatuses', []):
+        affected.extend(str(pid) for pid in status.get('ProductID', []))
+    affected.extend(pid for pid in kbs_by_pid if pid not in affected)
+
+    products, seen = [], set()
+    for pid in affected:
+        # One entry per (product, kb); products with no KB fix get kb=None.
+        for kb in (kbs_by_pid.get(pid) or [None]):
+            key = (pid, kb)
             if key not in seen:
                 seen.add(key)
-                products.append({"product": product_names.get(str(pid), str(pid)), "kb": str(kb)})
+                products.append({"product": product_names.get(pid, pid), "kb": kb})
     return products
 
 

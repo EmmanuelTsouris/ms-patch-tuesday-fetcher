@@ -45,8 +45,10 @@ def format_cve(cve):
 
     products = cve.get('products')
     if products:
-        kbs = sorted({p['kb'] for p in products})
-        parts.append(f"[KB{', KB'.join(kbs)}]")
+        # Some affected products have no KB fix (kb=None); only list real KBs.
+        kbs = sorted({p['kb'] for p in products if p.get('kb')})
+        if kbs:
+            parts.append(f"[KB{', KB'.join(kbs)}]")
     return " ".join(parts)
 
 
