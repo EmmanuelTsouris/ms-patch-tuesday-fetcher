@@ -429,3 +429,25 @@ def test_filter_reports_by_product():
 def test_filter_reports_by_product_drops_empty():
     reports = [{"title": "t", "release_date": "d", "kb_articles": ["KB1 (Applies to: Azure)"], "cves": []}]
     assert filter_reports_by_product(reports, "nonexistent") == []
+
+
+# A highlighted CVE with no product data (empty products list) still matches on
+# its title, so it isn't silently dropped from a --product-filtered report.
+def test_filter_reports_by_product_title_fallback_for_empty_products():
+    reports = [{
+        "title": "t", "release_date": "d", "kb_articles": [],
+        "cves": [{"id": "CVE-A", "title": "Microsoft SharePoint RCE", "products": []}],
+    }]
+    filtered = filter_reports_by_product(reports, "sharepoint")
+    assert [c['id'] for c in filtered[0]['cves']] == ["CVE-A"]
+
+
+# _notable_flags reads the specific labels and does not treat an exploitability
+# forecast ("Exploitation Less Likely") as confirmed exploitation.
+def test_notable_flags_precise_matching():
+    from ms_patch_tuesday_fetcher.core import _notable_flags
+    assert _notable_flags("Exploitation Detected") == (True, False)
+    assert _notable_flags("Publicly Known") == (False, True)
+    assert _notable_flags("Exploitation Less Likely") == (False, False)
+    assert _notable_flags("Exploitation More Likely") == (False, False)
+    assert _notable_flags(None) == (False, False)
