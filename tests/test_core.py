@@ -309,10 +309,41 @@ def test_collect_updates_full_cves_merges_notable(mock_fetch):
     # notable flag/wording is preserved.
     assert cves["CVE-2026-56155"]['notable'] is True
     assert cves["CVE-2026-56155"]['exploitation'] == "Exploitation Detected"
-    # CVE-2026-50661 is notable but not in the CVRF fixture; it must survive so
-    # full mode never shows fewer highlighted CVEs than the default.
+    # CVE-2026-50661 is notable ("Publicly Known") but not in the CVRF fixture;
+    # it must survive so full mode never shows fewer highlighted CVEs than the
+    # default, promoted to the full schema with consistent booleans.
     assert "CVE-2026-50661" in cves
-    assert cves["CVE-2026-50661"]['notable'] is True
+    preserved = cves["CVE-2026-50661"]
+    assert preserved['notable'] is True
+    assert preserved['publicly_disclosed'] is True
+    assert preserved['exploited'] is False
+    assert preserved['exploitation'] == "Publicly Disclosed"
+    # Uniform full-mode schema: same keys as a CVRF-sourced entry.
+    assert set(preserved) == set(cves["CVE-2026-56155"])
+
+
+# When the release note flags a CVE the CVRF record hasn't caught up to, the
+# merge folds that into the booleans so notable/exploited/publicly_disclosed
+# and the exploitation label all agree.
+@patch('ms_patch_tuesday_fetcher.core.fetch_cvrf_document')
+def test_full_cves_notable_updates_boolean_flags(mock_fetch):
+    with open(os.path.join(FIXTURES, "cvrf_sample.json")) as f:
+        mock_fetch.return_value = json.load(f)
+
+    # CVE-2026-48561 is non-notable in the CVRF fixture (exploited/disclosed
+    # both False); the release note flags it "Publicly Known".
+    description = """<table>
+      <tr><th>CVE ID</th><th>Title</th><th>Notable Item</th></tr>
+      <tr><td>CVE-2026-48561</td><td>Copilot RCE</td><td>Publicly Known</td></tr>
+    </table>"""
+    update = {"title": "July 2026", "releaseDate": "2026-07-14T07:00:00Z", "description": description}
+    results = collect_updates([update], include_full_cves=True)
+
+    cve = {c['id']: c for c in results[0]['cves']}["CVE-2026-48561"]
+    assert cve['notable'] is True
+    assert cve['publicly_disclosed'] is True          # derived from the notable wording
+    assert cve['exploited'] is False                  # wording didn't imply exploitation
+    assert cve['exploitation'] == "Publicly Disclosed"  # label agrees with the flags
 
 
 # The parsed CVRF list is cached and never mutated: two updates in the same
@@ -342,18 +373,29 @@ def test_collect_updates_full_cves_caches_and_isolates(mock_fetch):
     # A's notable wording applies to A only; B's copy is untouched — proof the
     # cached dicts were copied, not mutated in place.
     assert a["CVE-2026-48561"]['notable'] is True
-    assert a["CVE-2026-48561"]['exploitation'] == "Publicly Known"
+    assert a["CVE-2026-48561"]['publicly_disclosed'] is True
+    assert a["CVE-2026-48561"]['exploitation'] == "Publicly Disclosed"
     assert b["CVE-2026-48561"]['notable'] is False
+    assert b["CVE-2026-48561"]['publicly_disclosed'] is False
     assert b["CVE-2026-48561"]['exploitation'] is None
 
 
-# If the CVRF fetch fails, full mode falls back to the notable subset.
+# If the CVRF fetch fails, full mode still returns the notable subset, promoted
+# to the full schema so --full-cves output is uniform regardless of fetch outcome.
 @patch('ms_patch_tuesday_fetcher.core.fetch_cvrf_document', return_value=None)
 def test_collect_updates_full_cves_falls_back(mock_fetch):
     update = {"title": "July 2026", "releaseDate": "2026-07-14T07:00:00Z", "description": DESCRIPTION_WITH_CVES}
     results = collect_updates([update], include_full_cves=True)
 
-    assert [c['id'] for c in results[0]['cves']] == ["CVE-2026-56155", "CVE-2026-50661"]
+    cves = results[0]['cves']
+    assert [c['id'] for c in cves] == ["CVE-2026-56155", "CVE-2026-50661"]
+    # Full schema even on the fallback path (keys match a CVRF-sourced entry).
+    full_keys = {"id", "title", "severity", "impact", "cvss", "exploited",
+                 "publicly_disclosed", "exploitation", "notable", "products"}
+    assert all(set(c) == full_keys for c in cves)
+    # Notable wording is reflected in the booleans.
+    assert cves[0]['exploited'] is True                 # "Exploitation Detected"
+    assert cves[1]['publicly_disclosed'] is True        # "Publicly Known"
 
 
 # filter_reports_by_product narrows KBs and (full-mode) CVE products by name.
