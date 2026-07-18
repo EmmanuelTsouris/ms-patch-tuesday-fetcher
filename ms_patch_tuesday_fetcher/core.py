@@ -7,6 +7,7 @@ data/IO logic with no presentation — callers decide how to render the result.
 """
 
 import re
+import sys
 import json
 import requests
 from bs4 import BeautifulSoup  # For parsing HTML
@@ -27,6 +28,12 @@ CVE_ID_RE = re.compile(r'CVE-\d{4}-\d+')
 # across the various products it affects.
 _SEVERITY_ORDER = {"Critical": 4, "Important": 3, "Moderate": 2, "Low": 1}
 
+# MSRC CVRF document ids use English three-letter month abbreviations
+# (e.g. "2026-Jul"). Hard-coded rather than via strftime('%b'), which is
+# locale-dependent and would produce a wrong id under a non-English LC_TIME.
+_CVRF_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
 # Headers for the API (no API key needed)
 HEADERS = {
     'Accept': 'application/json'
@@ -46,12 +53,14 @@ def get_all_updates(show_raw=False, timeout=DEFAULT_TIMEOUT):
         updates = response.json()
 
         if show_raw:  # Show raw response if requested
-            print("Raw Updates Response:")
-            print(json.dumps(updates, indent=4))
+            # Diagnostics go to stderr so they never corrupt stdout when a
+            # caller is consuming a machine-readable payload (e.g. CLI --json).
+            print("Raw Updates Response:", file=sys.stderr)
+            print(json.dumps(updates, indent=4), file=sys.stderr)
 
         return updates.get('value', [])
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching updates from Microsoft API: {e}")
+        print(f"Error fetching updates from Microsoft API: {e}", file=sys.stderr)
         return []
 
 
@@ -158,7 +167,7 @@ def release_to_cvrf_id(update):
     parsed = parse_release_date(update.get('releaseDate'))
     if parsed is None:
         return None
-    return parsed.strftime('%Y-%b')
+    return f"{parsed.year}-{_CVRF_MONTHS[parsed.month - 1]}"
 
 
 # Fetch a monthly CVRF document. Returns the parsed JSON, or None on any
@@ -170,7 +179,7 @@ def fetch_cvrf_document(doc_id, timeout=DEFAULT_TIMEOUT):
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching CVRF document {doc_id}: {e}")
+        print(f"Error fetching CVRF document {doc_id}: {e}", file=sys.stderr)
         return None
 
 
@@ -270,6 +279,16 @@ def extract_cves_from_cvrf(cvrf_doc):
     ]
 
 
+# Fetch and parse a month's CVRF CVE list, memoized by document id so the
+# multi-MB document is fetched and parsed at most once per run. Caches the
+# parsed list (or None on failure), not the raw document.
+def _cvrf_cves(doc_id, cvrf_cache, timeout):
+    if doc_id not in cvrf_cache:
+        document = fetch_cvrf_document(doc_id, timeout=timeout)
+        cvrf_cache[doc_id] = extract_cves_from_cvrf(document) if document else None
+    return cvrf_cache[doc_id]
+
+
 # Resolve the CVE list for one update. Tier 1 (default) returns the notable
 # CVEs already present in the release note. Tier 2 (include_full_cves) fetches
 # the month's CVRF document for the complete list, carrying over the release
@@ -281,20 +300,30 @@ def _cves_for_update(update, notable, include_full_cves, cvrf_cache, timeout):
     doc_id = release_to_cvrf_id(update)
     if doc_id is None:
         return notable
-    if doc_id not in cvrf_cache:
-        cvrf_cache[doc_id] = fetch_cvrf_document(doc_id, timeout=timeout)
-    document = cvrf_cache[doc_id]
-    if not document:
+    full_cves = _cvrf_cves(doc_id, cvrf_cache, timeout)
+    if full_cves is None:
         return notable
 
-    full = extract_cves_from_cvrf(document)
+    # Merge the release note's "Notable Item" wording onto the matching CVRF
+    # entries. Copy each cached dict so the shared cache is never mutated.
     notable_labels = {cve['id']: cve.get('exploitation') for cve in notable}
-    for cve in full:
+    merged = []
+    full_ids = set()
+    for cve in full_cves:
+        full_ids.add(cve['id'])
+        entry = dict(cve)
         if cve['id'] in notable_labels:
-            cve['notable'] = True
+            entry['notable'] = True
             if notable_labels[cve['id']]:
-                cve['exploitation'] = notable_labels[cve['id']]
-    return full
+                entry['exploitation'] = notable_labels[cve['id']]
+        merged.append(entry)
+
+    # Preserve notable CVEs that the CVRF document doesn't list, so full mode
+    # never shows fewer highlighted CVEs than the default.
+    for cve in notable:
+        if cve['id'] not in full_ids:
+            merged.append(cve)
+    return merged
 
 
 # Build a structured report for each update: title, release date, the formatted

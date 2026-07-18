@@ -1,3 +1,4 @@
+import sys
 import json
 import argparse
 
@@ -108,6 +109,11 @@ def main():
     recent_updates = filter_updates_by_date(updates, args.days)
     reports = collect_updates(recent_updates, include_full_cves=args.full_cves)
     if args.product:
+        # Notable-only CVEs carry no product data, so product filtering can only
+        # narrow CVEs (beyond KB articles) when the full CVE list is fetched.
+        if not args.full_cves:
+            print("Note: --product filters CVEs by affected product only with --full-cves; "
+                  "without it, only KB articles are filtered.", file=sys.stderr)
         reports = filter_reports_by_product(reports, args.product)
 
     if args.as_json:

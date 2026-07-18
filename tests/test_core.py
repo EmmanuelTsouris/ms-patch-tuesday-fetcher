@@ -77,6 +77,27 @@ def test_get_all_updates_uses_timeout(mock_get):
     assert mock_get.call_args.kwargs.get('timeout') is not None
 
 
+# Diagnostics (raw dump and errors) must go to stderr, never stdout, so they
+# can't corrupt a machine-readable stdout payload (e.g. CLI --json).
+@patch('ms_patch_tuesday_fetcher.core.requests.get')
+def test_get_all_updates_diagnostics_go_to_stderr(mock_get, capsys):
+    import requests as _requests
+    mock_get.return_value.json.return_value = sample_response
+
+    # Raw dump goes to stderr, not stdout.
+    get_all_updates(show_raw=True)
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "Raw Updates Response:" in captured.err
+
+    # Request errors go to stderr, not stdout.
+    mock_get.side_effect = _requests.exceptions.RequestException("boom")
+    assert get_all_updates() == []
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "Error fetching updates" in captured.err
+
+
 def test_filter_updates_by_date():
     updates = sample_response['value']
 
@@ -218,12 +239,48 @@ def test_collect_updates_full_cves_merges_notable(mock_fetch):
 
     mock_fetch.assert_called_once_with("2026-Jul", timeout=30)
     cves = {c['id']: c for c in results[0]['cves']}
-    # Full list is returned (3 from the fixture), not the 2-item notable subset.
-    assert len(cves) == 3
+    # The 3 fixture CVEs plus the one notable CVE absent from the CVRF doc.
+    assert len(cves) == 4
     # CVE-2026-56155 appears in both the notable table and the CVRF doc; the
     # notable flag/wording is preserved.
     assert cves["CVE-2026-56155"]['notable'] is True
     assert cves["CVE-2026-56155"]['exploitation'] == "Exploitation Detected"
+    # CVE-2026-50661 is notable but not in the CVRF fixture; it must survive so
+    # full mode never shows fewer highlighted CVEs than the default.
+    assert "CVE-2026-50661" in cves
+    assert cves["CVE-2026-50661"]['notable'] is True
+
+
+# The parsed CVRF list is cached and never mutated: two updates in the same
+# month trigger a single fetch, and one update's notable wording must not leak
+# onto another's copy. CVE-2026-48561 is non-notable in the CVRF fixture, so
+# it's a clean discriminator.
+@patch('ms_patch_tuesday_fetcher.core.fetch_cvrf_document')
+def test_collect_updates_full_cves_caches_and_isolates(mock_fetch):
+    with open(os.path.join(FIXTURES, "cvrf_sample.json")) as f:
+        mock_fetch.return_value = json.load(f)
+
+    # Only update A's release note flags CVE-2026-48561 as notable.
+    description_a = """<table>
+      <tr><th>CVE ID</th><th>Title</th><th>Notable Item</th></tr>
+      <tr><td>CVE-2026-48561</td><td>Copilot RCE</td><td>Publicly Known</td></tr>
+    </table>"""
+    updates = [
+        {"title": "A", "releaseDate": "2026-07-14T07:00:00Z", "description": description_a},
+        {"title": "B", "releaseDate": "2026-07-20T07:00:00Z", "description": "<p>none</p>"},
+    ]
+    results = collect_updates(updates, include_full_cves=True)
+
+    # One fetch for the shared month (parsed list is cached).
+    mock_fetch.assert_called_once()
+    a = {c['id']: c for c in results[0]['cves']}
+    b = {c['id']: c for c in results[1]['cves']}
+    # A's notable wording applies to A only; B's copy is untouched — proof the
+    # cached dicts were copied, not mutated in place.
+    assert a["CVE-2026-48561"]['notable'] is True
+    assert a["CVE-2026-48561"]['exploitation'] == "Publicly Known"
+    assert b["CVE-2026-48561"]['notable'] is False
+    assert b["CVE-2026-48561"]['exploitation'] is None
 
 
 # If the CVRF fetch fails, full mode falls back to the notable subset.

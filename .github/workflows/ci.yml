@@ -6,9 +6,11 @@ on:
   # Allow running the live integration job on demand...
   workflow_dispatch:
   schedule:
-    # ...and automatically the day after Patch Tuesday (2nd Tuesday), i.e. the
-    # 2nd Wednesday of each month, at 16:00 UTC.
-    - cron: '0 16 8-14 * 3'
+    # ...and automatically every Wednesday at 16:00 UTC, which covers the day
+    # after Patch Tuesday (2nd Tuesday). A single "2nd Wednesday only" cron is
+    # not expressible: when both day-of-month and day-of-week are restricted,
+    # cron matches on EITHER, so `8-14 * 3` would also fire every day 8-14.
+    - cron: '0 16 * * 3'
 
 jobs:
   test:
