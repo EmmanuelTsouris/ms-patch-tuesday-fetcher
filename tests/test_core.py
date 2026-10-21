@@ -154,6 +154,20 @@ def test_extract_kb_handles_extra_columns():
     assert extract_kb_from_description(description) == [('5002624', 'SharePoint Enterprise Server 2016')]
 
 
+# A linked CVE ID in a three-column table (the release note's "Notable CVEs")
+# is not a KB article
+def test_extract_kb_skips_linked_cve_rows():
+    description = """<table>
+    <tr><th>CVE ID</th><th>Title</th><th>Notable Item</th></tr>
+    <tr><td><a href="https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96951">CVE-2026-96951</a></td><td>Windows Shell Security Feature Bypass Vulnerability</td><td>Exploitation Detected</td></tr>
+    </table>
+    <table>
+    <tr><th>KB Article</th><th>Applies To</th></tr>
+    <tr><td><a href="https://support.microsoft.com/help/5126646">5126646</a></td><td>Windows Server 2025</td></tr>
+    </table>"""
+    assert extract_kb_from_description(description) == [('5126646', 'Windows Server 2025')]
+
+
 # collect_updates returns structured dicts with formatted KB strings
 def test_collect_updates_structures_output():
     results = collect_updates(sample_response['value'])

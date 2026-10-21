@@ -117,8 +117,10 @@ def extract_kb_from_description(description):
         columns = row.find_all('td')  # Find all columns in the row
         if len(columns) >= 2:  # Header rows (only <th>) have no <td> and are skipped
             kb_link = columns[0].find('a')  # Find the KB link
-            if kb_link:
-                kb_number = kb_link.text  # Extract the KB number
+            # Other tables (e.g. "Notable CVEs") also link their first cell, so
+            # only a link whose text is a bare KB number counts.
+            if kb_link and kb_link.get_text(strip=True).isdigit():
+                kb_number = kb_link.get_text(strip=True)  # Extract the KB number
                 product = columns[1].text  # Extract the product it applies to
                 kb_list.append((kb_number, product))
     return kb_list
